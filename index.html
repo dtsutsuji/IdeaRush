@@ -55,7 +55,7 @@
             border: none;
             border-bottom: 2px solid var(--border-color);
             color: #ffffff;
-            font-size: 2rem;
+            font-size: 3rem;
             text-align: center;
             padding: 10px;
             box-sizing: border-box;
@@ -118,6 +118,27 @@
           margin: 2px 4px;
         }
 
+        /* アラートの基本スタイル */
+        #toast {
+          position: fixed;
+          bottom: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          background-color: #333;
+          color: #fff;
+          padding: 10px 20px;
+          border-radius: 5px;
+          opacity: 1;
+          transition: opacity 0.5s ease-out; /* フェードアウト用 */
+          z-index: 1000;
+        }
+
+        /* 非表示用クラス */
+        #toast.hidden {
+          opacity: 0;
+          pointer-events: none; /* クリック無効化 */
+        }
+
         /* レスポンシブ調整 */
         @media (max-width: 600px) {
             #timer-display { font-size: 3.5rem; }
@@ -157,6 +178,7 @@
       <button id="copyBtn" class="btn-reset">ClipBoard</button>
       <button id="mindmapBtn" class="btn-reset">Obsidian MaindMap</button>
     </div>
+    <div id="toast" class="hidden" role="alert">コピー成功！</div>
     
 </div>
 
@@ -273,9 +295,18 @@
     });
     
     document.getElementById('mindmapBtn').addEventListener('click', () => {
-      const theme = document.getElementById('theme-input').value;
-      const textToCopy = '```mermaid\nmindmap\n' + theme + '\n' + editor.value + '\n```';
+      const theme = document.getElementById('theme-input').value || 'Theme';
+      const formatedText = editor.value.replace(/^/gm, '  ');
+      const textToCopy = '```mermaid\nmindmap\n)**' + theme + '**(\n' + formatedText + '\n```';
       navigator.clipboard.writeText(textToCopy);
+      
+      // トーストの非表示・表示
+      const toast = document.getElementById('toast');
+      toast.classList.remove('hidden');
+      
+      setTimeout(function() {
+        toast.classList.add('hidden');
+      }, 2000);
     })
 
     // ブラウザを閉じる際の警告（簡易保存機能の代わり）
