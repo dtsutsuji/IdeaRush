@@ -1,2 +1,2 @@
 # IdeaRush
-[IdeaRush](https://dtsutsuji.github.io/ideaRush.html/)
+[IdeaRush](https://dtsutsuji.github.io/IdeaRush/)
